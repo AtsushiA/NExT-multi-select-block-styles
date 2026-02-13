@@ -2,8 +2,10 @@
 /**
  * Plugin Name: Multi Select Block Styles
  * Description: ブロックエディタのスタイル選択を複数選択可能にします。
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Your Name
+ * License: GPL v2 or later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: multi-select-block-styles
  */
 
@@ -21,6 +23,11 @@ class Multi_Select_Block_Styles {
      * ブロックエディタ用のアセットを読み込む
      */
     public function enqueue_editor_assets() {
+        // 投稿編集権限がない場合は読み込まない
+        if (!current_user_can('edit_posts')) {
+            return;
+        }
+
         wp_enqueue_script(
             'multi-select-block-styles',
             plugin_dir_url(__FILE__) . 'assets/js/multi-select-block-styles.js',

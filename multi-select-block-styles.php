@@ -3,7 +3,8 @@
  * Plugin Name: Multi Select Block Styles
  * Description: ブロックエディタのスタイル選択を複数選択可能にします。
  * Version: 1.0.1
- * Author: Your Name
+ * Author: NExT-Season
+ * Author URI: https://next-season.net
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain: multi-select-block-styles

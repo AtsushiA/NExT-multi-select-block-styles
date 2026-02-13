@@ -1,0 +1,17 @@
+/**
+ * Multi Block Styles - Editor Styles
+ */
+
+.multi-block-styles-panel .multi-block-styles-description {
+    font-size: 12px;
+    color: #757575;
+    margin-bottom: 12px;
+}
+
+.multi-block-styles-panel .multi-block-styles-checkbox {
+    margin-bottom: 8px;
+}
+
+.multi-block-styles-panel .components-checkbox-control__label {
+    font-size: 13px;
+}

@@ -103,28 +103,38 @@
      * ボタンからスタイル名を取得
      */
     function getStyleNameFromButton(button) {
-        // ボタンのラベルテキストからスタイル名を推測
-        var label = button.querySelector('.block-editor-block-styles__item-text');
-        if (label) {
-            var text = label.textContent.toLowerCase();
-            // 一般的なスタイル名のマッピング
-            var styleMap = {
-                'default': 'default',
-                'デフォルト': 'default',
-                'display': 'display',
-                'subtitle': 'subtitle',
-                'annotation': 'annotation'
-            };
+        var select = wp.data.select('core/block-editor');
+        var selectedBlock = select.getSelectedBlock();
 
-            if (styleMap[text]) {
-                return styleMap[text];
-            }
-
-            // その他のスタイル名はそのまま使用（スペースをハイフンに置換）
-            return text.replace(/\s+/g, '-');
+        if (!selectedBlock) {
+            return null;
         }
 
-        return null;
+        // ブロックタイプに登録されているスタイル一覧を取得
+        var blockStyles = wp.data.select('core/blocks').getBlockStyles(selectedBlock.name);
+
+        if (!blockStyles || blockStyles.length === 0) {
+            return null;
+        }
+
+        // ボタンのラベルテキストを取得
+        var label = button.querySelector('.block-editor-block-styles__item-text');
+        if (!label) {
+            return null;
+        }
+
+        var buttonLabel = label.textContent.trim();
+
+        // ラベルからスタイル名を検索
+        for (var i = 0; i < blockStyles.length; i++) {
+            var style = blockStyles[i];
+            if (style.label === buttonLabel) {
+                return style.name;
+            }
+        }
+
+        // 見つからない場合はラベルをそのままスタイル名として使用（フォールバック）
+        return buttonLabel.toLowerCase().replace(/\s+/g, '-');
     }
 
     /**

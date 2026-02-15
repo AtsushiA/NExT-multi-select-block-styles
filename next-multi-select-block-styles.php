@@ -1,13 +1,13 @@
 <?php
 /**
- * Plugin Name: Multi Select Block Styles
+ * Plugin Name: NExT Multi Select Block Styles
  * Description: ブロックエディタのスタイル選択を複数選択可能にします。
  * Version: 1.0.1
  * Author: NExT-Season
  * Author URI: https://next-season.net
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain: multi-select-block-styles
+ * Text Domain: next-multi-select-block-styles
  */
 
 if (!defined('ABSPATH')) {
@@ -33,7 +33,7 @@ class Multi_Select_Block_Styles {
             'multi-select-block-styles',
             plugin_dir_url(__FILE__) . 'assets/js/multi-select-block-styles.js',
             ['wp-blocks', 'wp-dom-ready', 'wp-edit-post', 'wp-hooks', 'wp-element', 'wp-components', 'wp-compose', 'wp-data', 'wp-block-editor'],
-            '1.0.0',
+            '1.0.2',
             false
         );
 
@@ -41,7 +41,7 @@ class Multi_Select_Block_Styles {
             'multi-select-block-styles',
             plugin_dir_url(__FILE__) . 'assets/css/multi-select-block-styles.css',
             [],
-            '1.0.0'
+            '1.0.2'
         );
     }
 }

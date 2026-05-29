@@ -77,7 +77,6 @@ jobs:
       - uses: wordpress/plugin-check-action@v1
         with:
           exclude-directories: 'vendor,tests,node_modules'
-          ignore-warnings: true
           categories: |
             general
             performance

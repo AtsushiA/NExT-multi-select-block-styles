@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@wordpress/e2e-test-utils-playwright": [
+        "./node_modules/@wordpress/e2e-test-utils-playwright/build"
+      ]
+    }
+  },
+  "include": [
+    "tests/e2e/**/*.ts",
+    "playwright.config.ts"
+  ]
+}

@@ -30,8 +30,6 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: root
-          # MYSQL_DATABASE を指定すると install-wp-tests.sh が対話入力を求めて CI が止まる。
-          # 代わりに install-wp-tests.sh の第6引数 true で DB 作成をスキップする。
         ports:
           - 3306:3306
         options: >-
@@ -63,25 +61,35 @@ jobs:
           rm -rf vendor
           composer install --no-interaction
       - name: Install WordPress test suite
-        run: bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 ${{ matrix.wp }} true
-      - name: Run PHPUnit
+        run: bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 ${{ matrix.wp }}
+      - name: Run PHPUnit (unit)
+        run: vendor/bin/phpunit --testsuite unit
+      - name: Run PHPUnit (integration)
         env:
           WP_TESTS_DIR: /tmp/wordpress-tests-lib
-        run: vendor/bin/phpunit --bootstrap tests/phpunit/bootstrap.php
+        run: vendor/bin/phpunit --testsuite integration --bootstrap tests/phpunit/bootstrap.php
 
   plugin-check:
     name: Plugin Check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: wordpress/plugin-check-action@v1
+      - uses: actions/setup-node@v4
         with:
-          exclude-directories: 'vendor,tests,node_modules'
-          categories: |
-            general
-            performance
-            accessibility
-            security
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Start wp-env
+        run: npx wp-env start
+      - name: Install Plugin Check CLI
+        run: npx wp-env run cli wp plugin install plugin-check --activate
+      - name: Run Plugin Check
+        run: |
+          PLUGIN_SLUG=$(basename $(pwd))
+          npx wp-env run cli wp plugin check "$PLUGIN_SLUG" \
+            --exclude-directories=vendor,tests,node_modules \
+            --categories=general,performance,accessibility,security \
+            --format=table
 
   e2e:
     name: E2E Tests

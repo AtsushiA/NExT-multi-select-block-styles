@@ -85,7 +85,8 @@ jobs:
         run: npx wp-env run cli wp plugin install plugin-check --activate
       - name: Run Plugin Check
         run: |
-          PLUGIN_SLUG=$(basename $(pwd))
+          PLUGIN_FILE=$(grep -rl "Plugin Name:" . --include="*.php" --max-depth=1 | head -1 | xargs basename)
+          PLUGIN_SLUG="${PLUGIN_FILE%.php}"
           npx wp-env run cli wp plugin check "$PLUGIN_SLUG" \
             --exclude-directories=vendor,tests,node_modules \
             --categories=general,performance,accessibility,security \

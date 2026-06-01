@@ -62,10 +62,12 @@ jobs:
           composer install --no-interaction
       - name: Install WordPress test suite
         run: bash bin/install-wp-tests.sh wordpress_test root root 127.0.0.1 ${{ matrix.wp }}
-      - name: Run PHPUnit
+      - name: Run PHPUnit (unit)
+        run: vendor/bin/phpunit --testsuite unit
+      - name: Run PHPUnit (integration)
         env:
           WP_TESTS_DIR: /tmp/wordpress-tests-lib
-        run: vendor/bin/phpunit --bootstrap tests/phpunit/bootstrap.php
+        run: vendor/bin/phpunit --testsuite integration --bootstrap tests/phpunit/bootstrap.php
 
   plugin-check:
     name: Plugin Check
@@ -83,7 +85,8 @@ jobs:
         run: npx wp-env run cli wp plugin install plugin-check --activate
       - name: Run Plugin Check
         run: |
-          npx wp-env run cli wp plugin check next-multi-select-block-styles \
+          PLUGIN_SLUG=$(basename $(pwd))
+          npx wp-env run cli wp plugin check "$PLUGIN_SLUG" \
             --exclude-directories=vendor,tests,node_modules \
             --categories=general,performance,accessibility,security \
             --format=table

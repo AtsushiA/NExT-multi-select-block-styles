@@ -76,7 +76,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
       - run: npm ci
       - name: Start wp-env
@@ -85,8 +85,9 @@ jobs:
         run: npx wp-env run cli wp plugin install plugin-check --activate
       - name: Run Plugin Check
         run: |
-          PLUGIN_FILE=$(grep -l "Plugin Name:" *.php | head -1)
-          PLUGIN_SLUG="${PLUGIN_FILE%.php}"
+          # wp-env はプラグインをチェックアウト先ディレクトリ名（= リポジトリ名）でマウントする。
+          # Plugin Check 2.2.0 以降はスラッグを厳密に照合するため、実際のディレクトリ名を渡す。
+          PLUGIN_SLUG=$(basename "$PWD")
           npx wp-env run cli wp plugin check "$PLUGIN_SLUG" \
             --exclude-directories=vendor,tests,node_modules \
             --categories=general,performance,accessibility,security \
@@ -99,7 +100,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
       - uses: shivammathur/setup-php@v2
         with:
